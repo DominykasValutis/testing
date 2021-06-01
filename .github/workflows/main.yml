@@ -16,14 +16,15 @@ jobs:
           script: |
             const commits_url = context.payload.pull_request.commits_url;
             const results = await github.request(commits_url);
-            let messages = 'JIRA tasks included: ;
+            let messages = 'JIRA tasks included: \n';
             if (results && results.data && results.data.length > 0) {
               const commits = results.data;
-                messages = commits.map(data => {
-                  if (data.startsWith('HRCREDS')) {
-                    return data.commit.message 
-                  }
-                }).join('\n');
+              const commitMessages = commits.map(data => {
+                if (data.startsWith('HRCREDS')) {
+                  return data.commit.message 
+                }
+              }).join('\n');
+              messages = messages.concat(commitMessages);
             } else {
               messages = 'Not found any commit messages';
             }
