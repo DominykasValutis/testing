@@ -16,7 +16,7 @@ jobs:
           script: |
             const commits_url = context.payload.pull_request.commits_url;
             const results = await github.request(commits_url);
-            let messages = 'JIRA tasks included: \n';
+            let messages = '**JIRA tasks included:** \n\n';
             if (results && results.data && results.data.length > 0) {
               const commits = results.data;
               const commitMessages = commits.map(data => {
