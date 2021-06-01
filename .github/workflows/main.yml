@@ -16,7 +16,9 @@ jobs:
           script: |
             const commits_url = context.payload.pull_request.commits_url
             const results = await github.request(commits_url)
-            const pull_request_number = context.payload.number
-            console.log(github)
+            console.log(results.data[0].commit.message)
             
-            console.log(results)
+            const pull_request_number = context.payload.number
+            
+            console.log(github.issues.createComment())
+            github.issues.createComment(results.data[0].commit.message)
