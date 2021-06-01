@@ -19,8 +19,7 @@ jobs:
             let messages;
             if (results && results.data && results.data.length > 0) {
               const commits = results.data;
-              messages = commits.map(data => data.commit.message);
-              console.log(messages);
+              messages = commits.map(data => data.commit.message).join('\n');
             } else {
               messages = 'Not found any commit messages';
             }
