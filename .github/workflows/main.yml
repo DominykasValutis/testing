@@ -18,9 +18,9 @@ jobs:
             const results = await github.request(commits_url)
             console.log(results.data[0].commit.message)
             
-            const options = {
+            await github.issues.createComment({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
-              name: context.repo.repo,
-              issue_number: context.payload.number
-            }
-            await github.issues.createComment(options)
+              repo: context.repo.repo,
+              body: 'test'
+            })
