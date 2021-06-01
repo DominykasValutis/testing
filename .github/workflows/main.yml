@@ -18,7 +18,10 @@ jobs:
             const results = await github.request(commits_url)
             console.log(results.data[0].commit.message)
             
-            const pull_request_number = context.payload.number
-            
-            console.log(github.issues.createComment())
-            github.issues.createComment(results.data[0].commit.message)
+            const var = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              issue_number: context.payload.number
+            }
+            console.log(github.issues.createComment)
+            github.issues.createComment(var)
