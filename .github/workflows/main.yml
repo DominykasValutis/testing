@@ -7,20 +7,26 @@ on:
     branches: [ main ]
 
 jobs:
-  diff:
+  info:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v4
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const commits_url = context.payload.pull_request.commits_url
-            const results = await github.request(commits_url)
-            console.log(results.data[0].commit.message)
-            
+            const commits_url = context.payload.pull_request.commits_url;
+            const results = await github.request(commits_url);
+            let messages;
+            if (results && results.data && results.data.length > 0) {
+              const commits = results.data;
+              messages = commits.map(data => data.commit.message);
+              console.log(messages);
+            } else {
+              messages = 'Not found any commit messages';
+            }
             await github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: results.data[0].commit.message
-            })
+              body: messages
+            });
