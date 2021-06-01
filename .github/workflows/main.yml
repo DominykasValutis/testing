@@ -1,0 +1,22 @@
+name: PR message info
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on pull request events but only for the main branch
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-scripts@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const diff_url = context.payload,pull_request.diff_url
+            const result = await github.request(diff_url)
+            console.log(result)
