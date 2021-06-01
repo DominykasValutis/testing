@@ -16,4 +16,7 @@ jobs:
           script: |
             const commits_url = context.payload.pull_request.commits_url
             const results = await github.request(commits_url)
+            const pull_request_number = context.payload.number
+            console.log(github.pull_request)
+            
             console.log(results)
