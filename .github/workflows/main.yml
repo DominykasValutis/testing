@@ -4,10 +4,10 @@ name: PR message info
 on:
   # Triggers the workflow on pull request events but only for the main branch
   pull_request:
-    branches: [ main ]
+    branches: [ main, test ]
 
 jobs:
-  info:
+  JIRA:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v4
