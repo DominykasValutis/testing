@@ -1,0 +1,36 @@
+name: PR message info
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on pull request events but only for the main branch
+  pull_request:
+    branches: [ main, test, prod ]
+
+jobs:
+  JIRA:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const commits_url = context.payload.pull_request.commits_url;
+            const results = await github.request(commits_url);
+            let messages = '**JIRA tasks included:** \n\n';
+            if (results && results.data && results.data.length > 0) {
+              const commits = results.data;
+              const commitMessages = commits.map(data => {
+                if (data.commit.message.toUpperCase().includes('HRCREDS')) {
+                  return data.commit.message 
+                }
+              }).join('\n');
+              messages = messages.concat(commitMessages);
+            } else {
+              messages = 'Not found any commit messages';
+            }
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: messages
+            });
